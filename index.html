@@ -15,15 +15,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-98733909-3"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(argument);}
-  gtag('js', new Date());
-  gtag('config', 'UA-98733909-3');
+  // window.dataLayer = window.dataLayer || [];
+  // function gtag(){dataLayer.push(argument);}
+  // gtag('js', new Date());
+  // gtag('config', 'UA-98733909-3');
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
 *{
-  max-width:100%; /*모바일에 맞추는 방법*/
+  max-width:100%; /*모바일에 맞추는 방*/
+}
+#caution {
+  font-size: 10px;
 }
 .container {
   display: flex;
@@ -35,7 +38,7 @@ footer {
 }
 .canvas {
   border:1px solid black;
-  max-width: :100%;
+  max-width: 100%;
   border-radius: 6px;
 }
 .textarea{
@@ -49,7 +52,10 @@ textarea{
   height:150px;
   resize: none;
 }
-
+.inner_setting{
+  width:22%;
+  float:left;
+}
 nav{
   width:640px;
   text-align: center;
@@ -59,7 +65,7 @@ nav{
   text-align: center;
   width:640px;
   border-radius: 6px;
-  background-color:#F0F0F0;
+  background-color: #F0F0F0;
 }
 .btndownload, .btndownload:visited, .btndownload:link, .btndownload:active{
   display:inline-block;
@@ -86,6 +92,10 @@ nav{
       <div class="col">
         <nav class='header'>
           <span class='title'><strong>기독교 짤 생성기</strong></span><br>
+          <div id="caution">
+            1) enter키를 누르시면 줄 바꿈이 됩니다.<br>
+            2) 카카오톡 환경에서 저장이 되지 않을 수 있습니다. 크롬 혹은 사파리를 이용해주세요.
+          </div>
         </nav>
         <canvas class="canvas" crossOrigin = 'Anonymous' id="mainCanvas" width="640" height="480"></canvas>
         <div class="form-group"><br>
@@ -93,6 +103,32 @@ nav{
           <div class="textarea">
           <textarea class="form-control" placeholder="기도제목을 적어주세요" id="txtprey"></textarea>
           </div><br>
+          <div class="setting">
+
+
+            <div id="font_size" class="inner_setting">
+              폰트크기
+            </div>
+            <select class="inner_setting" id="txtfont1">
+              <option value="40">40</option>
+              <option value="30">30</option>
+              <option value="20">20</option>
+              <option value="10">10</option>
+            </select>
+            <div id="font_size" class="inner_setting">
+              글꼴
+            </div>
+            <select class="inner_setting" id="txtshape1">
+              <option value="East Sea Dokdo">East Sea Dokdo</option>
+              <option value="Nanum Gothic">나눔고딕</option>
+              <option value="Noto Sans KR">본고딕</option>
+              <option value="Nanum Brush Script">나눔손글씨붓</option>
+              <option value="궁서">궁서체</option>
+              <option value="돋음">돋음체</option>
+            </select>
+          </div>
+          <br><br>
+
           <a class="btndownload" id="btndownload"><strong>내려받기</strong></a><br><br>
         </div>
 
@@ -103,6 +139,31 @@ nav{
           <div class="textarea">
           <textarea class="form-control" placeholder="말씀을 적어주세요" id="txtwith"></textarea>
           </div><br>
+          <div class="setting">
+
+            <div id="font_size" class="inner_setting">
+              폰트크기
+            </div>
+            <select class="inner_setting" id="txtfont2">
+              <option value="40">40</option>
+              <option value="30">30</option>
+              <option value="20">20</option>
+              <option value="10">10</option>
+            </select>
+
+            <div id="font_size" class="inner_setting">
+              글꼴
+            </div>
+            <select class="inner_setting" id="txtshape2" value="40">
+              <option value="East Sea Dokdo">East Sea Dokdo</option>
+              <option value="Nanum Gothic">나눔고딕</option>
+              <option value="Noto Sans KR">본고딕</option>
+              <option value="Nanum Brush Script">나눔손글씨붓</option>
+              <option value="궁서">궁서체</option>
+              <option value="돋음">돋음체</option>
+            </select>
+          </div>
+          <br><br>
           <a class="btndownload" id="btndownload2"><strong>내려받기</strong></a><br><br>
         </div>
 
@@ -112,7 +173,7 @@ nav{
     </div>
   </div>
   <footer>
-    <div class="">
+    <div>
       <strong>기독교 짤 생성기를 이용해주셔서 감사합니다.</strong><br>
       made by "psy_choi"
     </div>
@@ -125,14 +186,24 @@ nav{
   const mainCanvas = document.getElementById('mainCanvas'); //mainCanvas에 대한 요소를 가져
   const mainCanvas2 = document.getElementById('mainCanvas2');
 
-  const drawStroked = function (ctx, text, x, y){ // 이 xy 값에 text를 놓
+
+  const drawStroked = function (ctx, text, x, y, size){ // 이 xy 값에 text를 놓
     const arr = text.split("\n");
+    var interval = 55;
+    if (size === 40) {
+      interval = 55;
+    }else if (size === 30) {
+      interval = 45;
+    }else if (size === 20) {
+      interval = 35;
+    }else if (size === 10) {
+      interval = 25;
+    }
     for(var i = 0; i < arr.length; i++){
-      var k = 55 * i;
+      var k = interval * i;
       ctx.textAlign = "center"
       ctx.strokeStyle = '#222';
-      ctx.lineWidth = 4;
-      //ctx.strokeText(arr[i], x, y+k);
+      ctx.lineWidth = 2;
       ctx.fillStyle = 'black'
       ctx.fillText(arr[i], x, y+k);
     }
@@ -143,18 +214,28 @@ nav{
   $(function(){
     const $txtprey = $('#txtprey'); //$ 안에 #을 넣어서 id값을 드러낸다.
     const $txtwith = $('#txtwith');
+    const $font_size1 = $('#txtfont1');
+    const $font_size2 = $('#txtfont2');
+    const $font_shape1 = $('#txtshape1');
+    const $font_shape2 = $('#txtshape2');
+
+
     $txtprey.keyup(function(){
       var prey = $(this).val();
+      var font_size1 = $font_size1.val();
+      var font_shape1 = $font_shape1.val();
       const ctx1 = mainCanvas.getContext("2d"); //canvas에서 2d 값으로 얻고 싶다면 이렇게 함
       ctx1.drawImage(preyImg, 0, 0);
-      ctx1.font = "40pt 'East Sea Dokdo'";
-      drawStroked(ctx1, prey, 440, 100);
+      ctx1.font = `${font_size1}pt '${font_shape1}'`;
+      drawStroked(ctx1, prey, 440, 100, font_size1);
     });
     $txtwith.keyup(function(){
       var withw = $(this).val();
+      var font_size2 = $font_size2.val();
+      var font_shape2 = $font_shape2.val();
       const ctx2 = mainCanvas2.getContext("2d"); //canvas에서 2d 값으로 얻고 싶다면 이렇게 함
       ctx2.drawImage(withImg, 0, 0);
-      ctx2.font = "40pt 'East Sea Dokdo'";
+      ctx2.font = `${font_size2}pt`+ `'${font_shape2}'`;
       drawStroked(ctx2, withw, 320, 80);
     });
     $('#btndownload').click(function(){
@@ -162,7 +243,6 @@ nav{
       this.href = href;
       this.download ="prey.png";
     });
-
     $('#btndownload2').click(function(){
       const href = mainCanvas2.toDataURL(); //url을 가져오는 방식
       this.href = href;
@@ -175,28 +255,31 @@ nav{
       ctx1.fillStyle = "white";
       ctx1.scale(1,1);
       preyImg.onload = function (){
-        ctx.drawImage(preyImg, 0, 0);
+        ctx1.drawImage(preyImg, 0, 0);
         $txtprey.keyup();
       };
       preyImg.src = "./image/기도.jpg";
+      preyImg.crossOrigin = 'Anonymous';
+
 
       withImg.onload = function() {
         ctx2.drawImage(withImg, 0, 0);
         $txtprey.keyup();
       };
       withImg.src = "./image/함께하는.jpg";
+      withImg.crossOrigin = 'Anonymous';
 
     };
   });
 </script>
 
 <script>
-  $(function(){
-    $('#btndownload').click(function(){
-      const v= JSON.stringify({prey:$('#txtprey').val(), with:$('#txtwith').val()});
-      gtag('event', 'christian', {event_category:'download', 'event_label':v});
-      });
-    });
+  // $(function(){
+  //   $('#btndownload').click(function(){
+  //     const v= JSON.stringify({prey:$('#txtprey').val(), with:$('#txtwith').val()});
+  //     gtag('event', 'christian', {event_category:'download', 'event_label':v});
+  //     });
+  //   });
   </script>
   </body>
 </html>
